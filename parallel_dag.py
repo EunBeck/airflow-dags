@@ -1,6 +1,6 @@
 from airflow import DAG
-from airflow.operators.bash_operator import BashOperator
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.bash import BashOperator
+from airflow.operators.python import PythonOperator
 
 from datetime import datetime
 
@@ -9,9 +9,11 @@ default_args = {
     'owner': 'Airflow',
 }
 
+
 def process(p1):
     print(p1)
     return 'done'
+
 
 with DAG(dag_id='parallel_dag', schedule_interval='0 0 * * *', default_args=default_args, catchup=False) as dag:
     
@@ -25,4 +27,3 @@ with DAG(dag_id='parallel_dag', schedule_interval='0 0 * * *', default_args=defa
     task_6 = BashOperator(task_id='task_6', bash_command='sleep 60')
 
     tasks >> task_4 >> task_5 >> task_6
-        
